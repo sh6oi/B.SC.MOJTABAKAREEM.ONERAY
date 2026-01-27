@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة - المسجلين في تدريب الأشعة</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --danger-color: #EF4444;
+            --warning-color: #F59E0B;
+            --light-bg: #F8FAFC;
+            --dark-bg: #1E293B;
+            --sidebar-bg: #1E293B;
+            --card-bg: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-light: #64748B;
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+            --gradient-primary: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --gradient-danger: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            --gradient-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .admin-logo i {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .admin-logo h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .nav-menu {
+            padding: 25px 0;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-right-color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background: rgba(79, 70, 229, 0.2);
+            border-right-color: var(--primary-color);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-right: 280px;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background: white;
+            margin: 20px 30px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .filters-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-bg);
+        }
+
+        /* Data Section */
+        .data-section {
+            padding: 0 30px 30px;
+        }
+
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .data-header h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .data-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-export {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .btn-refresh {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .registration-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .user-avatar-small {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .user-info-card {
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .user-phone {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-date {
+            background: var(--light-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .card-body {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .status-new {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .card-footer {
+            display: flex;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .btn-icon {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 8px;
+        }
+
+        .btn-edit {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .btn-edit:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-view {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+        }
+
+        .btn-view:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* No Data State */
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .no-data i {
+            font-size: 4rem;
+            color: var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .no-data h3 {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .no-data p {
+            color: var(--text-light);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            grid-column: 1 / -1;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            animation: slideUp 0.4s ease;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .edit-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-custom {
+            border-color: var(--primary-color);
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-custom::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            background: var(--light-bg);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .btn-cancel {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-save {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        /* Confirm Modal */
+        .confirm-modal {
+            max-width: 400px;
+        }
+
+        .confirm-body {
+            text-align: center;
+            padding: 40px 30px;
+        }
+
+        .confirm-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.5rem;
+            color: var(--danger-color);
+        }
+
+        .confirm-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .confirm-subtext {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 20px 25px;
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1001;
+            animation: slideInRight 0.5s ease;
+            max-width: 400px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            background: var(--gradient-success);
+        }
+
+        .toast-error {
+            background: var(--gradient-danger);
+        }
+
+        .toast i {
+            font-size: 1.4rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-right: 250px;
+            }
+            
+            .edit-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .top-bar {
+                padding: 15px 20px;
+            }
+            
+            .filters-section,
+            .data-section {
+                padding: 15px 20px;
+                margin: 15px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                color: var(--text-dark);
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-actions {
+                flex-direction: column;
+            }
+            
+            .card-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+            
+            .toast {
+                left: 20px;
+                right: 20px;
+                max-width: calc(100% - 40px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="admin-logo">
+                    <i class="fas fa-users-cog"></i>
+                    <div>
+                        <h2>لوحة الإدارة</h2>
+                        <small style="opacity: 0.7;">تدريب الأشعة الطبية</small>
+                    </div>
+                </div>
+                
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalRegistrations">0</div>
+                        <div class="stat-label">المسجلين</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayRegistrations">0</div>
+                        <div class="stat-label">اليوم</div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="navigateTo('registrations')">
+                    <i class="fas fa-users"></i>
+                    <span>المسجلين</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('analytics')">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>الإحصائيات</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>الإعدادات</span>
+                </div>
+                <div class="nav-item" onclick="exportData()">
+                    <i class="fas fa-file-export"></i>
+                    <span>تصدير البيانات</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='index.html'">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة للتسجيل</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="ابحث بالاسم، الهاتف، أو المحافظة...">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600;">مدير النظام</div>
+                        <small style="color: var(--text-light);">آخر دخول: الآن</small>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Filters Section -->
+            <section class="filters-section">
+                <div class="filters-header">
+                    <h3><i class="fas fa-filter"></i> تصفية البيانات</h3>
+                    <div class="filter-actions">
+                        <button class="btn btn-primary" onclick="applyFilters()">
+                            <i class="fas fa-filter"></i>
+                            تطبيق التصفية
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearFilters()">
+                            <i class="fas fa-redo"></i>
+                            إعادة تعيين
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label><i class="fas fa-map-marker-alt"></i> المحافظة</label>
+                        <select id="filterGovernorate">
+                            <option value="">جميع المحافظات</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label><i class="fas fa-x-ray"></i> نوع الجهاز</label>
+                        <select id="filterDevice">
+                            <option value="">جميع الأجهزة</option>
+                            <option value="X-ray">X-ray فقط</option>
+                            <option value="X-ray and CT">X-ray and CT</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label><i class="fas fa-graduation-cap"></i> الحالة الدراسية</label>
+                        <select id="filterStudyStatus">
+                            <option value="">جميع الحالات</option>
+                            <option value="طالب">طالب</option>
+                            <option value="خريج">خريج</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label><i class="fas fa-calendar"></i> التاريخ</label>
+                        <input type="date" id="filterDate">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Section -->
+            <section class="data-section">
+                <div class="data-header">
+                    <h3><i class="fas fa-users"></i> قائمة المسجلين</h3>
+                    <div class="data-actions">
+                        <button class="btn btn-export" onclick="exportToExcel()">
+                            <i class="fas fa-file-excel"></i>
+                            تصدير Excel
+                        </button>
+                        <button class="btn btn-refresh" onclick="loadRegistrations()">
+                            <i class="fas fa-sync-alt"></i>
+                            تحديث
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="cards-grid" id="registrationsGrid">
+                    <!-- البيانات سيتم عرضها هنا -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>جاري تحميل البيانات...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> تعديل بيانات المسجل</h3>
+                <button class="close-btn" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" class="edit-form"></form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i>
+                    إلغاء
+                </button>
+                <button class="btn btn-save" onclick="updateRegistration()">
+                    <i class="fas fa-save"></i>
+                    حفظ التغييرات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> تأكيد الحذف</h3>
+                <button class="close-btn" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="confirm-body">
+                <div class="confirm-icon">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <h3 class="confirm-text" id="deleteConfirmText"></h3>
+                <p class="confirm-subtext">لا يمكن التراجع عن هذا الإجراء بعد التنفيذ</p>
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn btn-cancel" onclick="closeDeleteModal()" style="flex: 1;">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </button>
+                    <button class="btn btn-delete" onclick="confirmDelete()" style="flex: 1; background: var(--gradient-danger); color: white;">
+                        <i class="fas fa-trash-alt"></i>
+                        تأكيد الحذف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast toast-success" id="successToast" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">تمت العملية بنجاح!</div>
+        <button class="close-btn" onclick="hideToast('successToast')" style="background: transparent;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="toast toast-error" id="errorToast" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <div class="toast-content" id="errorToastContent"></div>
+        <button class="close-btn" onclick="hideToast('errorToast')" style="background: transparent;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGgdKRO0bpZwoXzjBmOVEBH5_YDnly4wk",
+            authDomain: "lunex-jewe.firebaseapp.com",
+            databaseURL: "https://lunex-jewe-default-rtdb.firebaseio.com",
+            projectId: "lunex-jewe",
+            storageBucket: "lunex-jewe.firebasestorage.app",
+            messagingSenderId: "79262821764",
+            appId: "1:79262821764:web:7e3f48fb093fb9edf0c1d1",
+            measurementId: "G-YR7YJ450MH"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Global variables
+        let allRegistrations = [];
+        let currentEditId = null;
+        let currentDeleteId = null;
+        let currentDeleteName = '';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load registrations
+            loadRegistrations();
+            
+            // Populate governorates filter
+            populateGovernorates();
+            
+            // Add event listeners
+            addEventListeners();
+        });
+
+        // Load registrations from Firebase
+        function loadRegistrations() {
+            const registrationsRef = ref(database, 'registrations');
+            const loadingElement = document.querySelector('#registrationsGrid .loading');
+            
+            if (loadingElement) {
+                loadingElement.style.display = 'flex';
+            }
+            
+            onValue(registrationsRef, (snapshot) => {
+                allRegistrations = [];
+                let todayCount = 0;
+                const today = new Date().toDateString();
+                
+                snapshot.forEach((childSnapshot) => {
+                    const registration = childSnapshot.val();
+                    registration.id = childSnapshot.key;
+                    
+                    // Count today's registrations
+                    const regDate = new Date(registration.registrationDate).toDateString();
+                    if (regDate === today) {
+                        todayCount++;
+                    }
+                    
+                    allRegistrations.push(registration);
+                });
+                
+                // Update statistics
+                document.getElementById('totalRegistrations').textContent = allRegistrations.length;
+                document.getElementById('todayRegistrations').textContent = todayCount;
+                
+                // Display registrations
+                displayRegistrations(allRegistrations);
+            }, (error) => {
+                console.error('Error loading data:', error);
+                showError('حدث خطأ في تحميل البيانات');
+                
+                const grid = document.getElementById('registrationsGrid');
+                grid.innerHTML = `
+                    <div class="no-data">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>حدث خطأ في تحميل البيانات</h3>
+                        <p>يرجى التحقق من اتصال الإنترنت وإعادة المحاولة</p>
+                        <button class="btn btn-primary" onclick="loadRegistrations()" style="margin-top: 20px;">
+                            <i class="fas fa-redo"></i>
+                            إعادة المحاولة
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // Display registrations in grid
+        function displayRegistrations(registrations) {
+            const grid = document.getElementById('registrationsGrid');
+            
+            if (registrations.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-data">
+                        <i class="fas fa-users-slash"></i>
+                        <h3>لا توجد بيانات لعرضها</h3>
+                        <p>لم يتم تسجيل أي مستخدمين حتى الآن</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by date (newest first)
+            registrations.sort((a, b) => b.timestamp - a.timestamp);
+            
+            let html = '';
+            
+            registrations.forEach(registration => {
+                const date = new Date(registration.registrationDate);
+                const formattedDate = date.toLocaleDateString('ar-IQ', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const priceFormatted = parseInt(registration.price).toLocaleString('ar-IQ');
+                const timeAgo = getTimeAgo(date);
+                
+                html += `
+                <div class="registration-card" data-id="${registration.id}">
+                    <div class="card-header">
+                        <div class="user-avatar-small">
+                            ${getInitials(registration.fullName)}
+                        </div>
+                        <div class="user-info-card">
+                            <div class="user-name">${registration.fullName}</div>
+                            <div class="user-phone">
+                                <i class="fas fa-phone"></i>
+                                ${registration.phone}
+                            </div>
+                        </div>
+                        <div class="card-date">
+                            <i class="far fa-clock"></i>
+                            ${timeAgo}
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="info-item">
+                            <span class="info-label">المحافظة</span>
+                            <span class="info-value">${registration.governorate}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">الجهاز</span>
+                            <span class="info-value">${registration.device}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">السعر</span>
+                            <span class="info-value">${priceFormatted} دينار</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">الحالة</span>
+                            <span class="info-value">${registration.studyStatus}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">الجامعة</span>
+                            <span class="info-value">${registration.university}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">الخبرة</span>
+                            <span class="info-value status-badge ${registration.experience === 'نعم' ? 'status-new' : 'status-pending'}">
+                                ${registration.experience}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <button class="btn-icon btn-view" onclick="viewRegistration('${registration.id}')">
+                            <i class="fas fa-eye"></i>
+                            عرض
+                        </button>
+                        <button class="btn-icon btn-edit" onclick="openEditModal('${registration.id}')">
+                            <i class="fas fa-edit"></i>
+                            تعديل
+                        </button>
+                        <button class="btn-icon btn-delete" onclick="openDeleteModal('${registration.id}', '${registration.fullName}')">
+                            <i class="fas fa-trash-alt"></i>
+                            حذف
+                        </button>
+                    </div>
+                </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        // Open edit modal
+        function openEditModal(id) {
+            currentEditId = id;
+            const registration = allRegistrations.find(r => r.id === id);
+            
+            if (!registration) {
+                showError('لم يتم العثور على البيانات');
+                return;
+            }
+            
+            const form = document.getElementById('editForm');
+            form.innerHTML = `
+                <div class="form-group form-group-full">
+                    <label for="editFullName">الاسم الثلاثي</label>
+                    <input type="text" id="editFullName" value="${registration.fullName}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editPhone">رقم الهاتف</label>
+                    <input type="tel" id="editPhone" value="${registration.phone}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editGovernorate">المحافظة</label>
+                    <select id="editGovernorate" required>
+                        <option value="بغداد" ${registration.governorate === 'بغداد' ? 'selected' : ''}>بغداد</option>
+                        <option value="البصرة" ${registration.governorate === 'البصرة' ? 'selected' : ''}>البصرة</option>
+                        <option value="نينوى" ${registration.governorate === 'نينوى' ? 'selected' : ''}>نينوى</option>
+                        <option value="أربيل" ${registration.governorate === 'أربيل' ? 'selected' : ''}>أربيل</option>
+                        <option value="السليمانية" ${registration.governorate === 'السليمانية' ? 'selected' : ''}>السليمانية</option>
+                        <option value="دهوك" ${registration.governorate === 'دهوك' ? 'selected' : ''}>دهوك</option>
+                        <option value="الأنبار" ${registration.governorate === 'الأنبار' ? 'selected' : ''}>الأنبار</option>
+                        <option value="كركوك" ${registration.governorate === 'كركوك' ? 'selected' : ''}>كركوك</option>
+                        <option value="ديالى" ${registration.governorate === 'ديالى' ? 'selected' : ''}>ديالى</option>
+                        <option value="واسط" ${registration.governorate === 'واسط' ? 'selected' : ''}>واسط</option>
+                        <option value="ميسان" ${registration.governorate === 'ميسان' ? 'selected' : ''}>ميسان</option>
+                        <option value="ذي قار" ${registration.governorate === 'ذي قار' ? 'selected' : ''}>ذي قار</option>
+                        <option value="المثنى" ${registration.governorate === 'المثنى' ? 'selected' : ''}>المثنى</option>
+                        <option value="القادسية" ${registration.governorate === 'القادسية' ? 'selected' : ''}>القادسية</option>
+                        <option value="بابل" ${registration.governorate === 'بابل' ? 'selected' : ''}>بابل</option>
+                        <option value="كربلاء" ${registration.governorate === 'كربلاء' ? 'selected' : ''}>كربلاء</option>
+                        <option value="النجف" ${registration.governorate === 'النجف' ? 'selected' : ''}>النجف</option>
+                        <option value="صلاح الدين" ${registration.governorate === 'صلاح الدين' ? 'selected' : ''}>صلاح الدين</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>الجهاز</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="editDevice" value="X-ray" ${registration.device === 'X-ray' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>X-ray فقط</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="editDevice" value="X-ray and CT" ${registration.device === 'X-ray and CT' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>X-ray and CT</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>السعر</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="editPrice" value="100000" ${registration.price === '100000' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>100,000 دينار</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="editPrice" value="125000" ${registration.price === '125000' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>125,000 دينار</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>الحالة الدراسية</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="editStudyStatus" value="طالب" ${registration.studyStatus === 'طالب' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>طالب</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="editStudyStatus" value="خريج" ${registration.studyStatus === 'خريج' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>خريج</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editUniversity">الجامعة</label>
+                    <input type="text" id="editUniversity" value="${registration.university}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>الخبرة السابقة</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="editExperience" value="نعم" ${registration.experience === 'نعم' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>نعم</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="editExperience" value="لا" ${registration.experience === 'لا' ? 'checked' : ''}>
+                            <span class="radio-custom"></span>
+                            <span>لا</span>
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        // Update registration
+        async function updateRegistration() {
+            if (!currentEditId) return;
+            
+            try {
+                const updatedData = {
+                    fullName: document.getElementById('editFullName').value.trim(),
+                    phone: document.getElementById('editPhone').value.trim(),
+                    governorate: document.getElementById('editGovernorate').value,
+                    device: document.querySelector('input[name="editDevice"]:checked').value,
+                    price: document.querySelector('input[name="editPrice"]:checked').value,
+                    studyStatus: document.querySelector('input[name="editStudyStatus"]:checked').value,
+                    university: document.getElementById('editUniversity').value.trim(),
+                    experience: document.querySelector('input[name="editExperience"]:checked').value,
+                    lastUpdated: Date.now()
+                };
+                
+                const registrationRef = ref(database, `registrations/${currentEditId}`);
+                await update(registrationRef, updatedData);
+                
+                closeEditModal();
+                showSuccess('تم تحديث البيانات بنجاح');
+                
+            } catch (error) {
+                showError('حدث خطأ أثناء التحديث: ' + error.message);
+            }
+        }
+
+        // Open delete confirmation modal
+        function openDeleteModal(id, name) {
+            currentDeleteId = id;
+            currentDeleteName = name;
+            
+            document.getElementById('deleteConfirmText').textContent = `هل أنت متأكد من حذف ${name}؟`;
+            document.getElementById('deleteModal').style.display = 'block';
+        }
+
+        // Confirm and execute delete
+        async function confirmDelete() {
+            if (!currentDeleteId) return;
+            
+            try {
+                const registrationRef = ref(database, `registrations/${currentDeleteId}`);
+                await remove(registrationRef);
+                
+                closeDeleteModal();
+                showSuccess('تم حذف البيانات بنجاح');
+                
+            } catch (error) {
+                showError('حدث خطأ أثناء الحذف: ' + error.message);
+            }
+        }
+
+        // View registration details
+        function viewRegistration(id) {
+            const registration = allRegistrations.find(r => r.id === id);
+            
+            if (registration) {
+                const details = `
+                    الاسم: ${registration.fullName}
+                    الهاتف: ${registration.phone}
+                    المحافظة: ${registration.governorate}
+                    الجهاز: ${registration.device}
+                    السعر: ${parseInt(registration.price).toLocaleString('ar-IQ')} دينار
+                    الحالة الدراسية: ${registration.studyStatus}
+                    الجامعة: ${registration.university}
+                    الخبرة: ${registration.experience}
+                    تاريخ التسجيل: ${new Date(registration.registrationDate).toLocaleDateString('ar-IQ')}
+                `;
+                
+                alert(details);
+            }
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const governorate = document.getElementById('filterGovernorate').value;
+            const device = document.getElementById('filterDevice').value;
+            const studyStatus = document.getElementById('filterStudyStatus').value;
+            const date = document.getElementById('filterDate').value;
+            
+            const filtered = allRegistrations.filter(registration => {
+                const matchesSearch = searchTerm === '' || 
+                    registration.fullName.toLowerCase().includes(searchTerm) ||
+                    registration.phone.includes(searchTerm) ||
+                    registration.governorate.toLowerCase().includes(searchTerm);
+                
+                const matchesGovernorate = governorate === '' || registration.governorate === governorate;
+                const matchesDevice = device === '' || registration.device === device;
+                const matchesStudyStatus = studyStatus === '' || registration.studyStatus === studyStatus;
+                
+                let matchesDate = true;
+                if (date) {
+                    const regDate = new Date(registration.registrationDate).toISOString().split('T')[0];
+                    matchesDate = regDate === date;
+                }
+                
+                return matchesSearch && matchesGovernorate && matchesDevice && matchesStudyStatus && matchesDate;
+            });
+            
+            displayRegistrations(filtered);
+        }
+
+        // Clear all filters
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterGovernorate').value = '';
+            document.getElementById('filterDevice').value = '';
+            document.getElementById('filterStudyStatus').value = '';
+            document.getElementById('filterDate').value = '';
+            
+            displayRegistrations(allRegistrations);
+        }
+
+        // Populate governorates dropdown
+        function populateGovernorates() {
+            const governorates = [
+                'بغداد', 'البصرة', 'نينوى', 'أربيل', 'السليمانية',
+                'دهوك', 'الأنبار', 'كركوك', 'ديالى', 'واسط',
+                'ميسان', 'ذي قار', 'المثنى', 'القادسية', 'بابل',
+                'كربلاء', 'النجف', 'صلاح الدين'
+            ];
+            
+            const select = document.getElementById('filterGovernorate');
+            governorates.forEach(gov => {
+                const option = document.createElement('option');
+                option.value = gov;
+                option.textContent = gov;
+                select.appendChild(option);
+            });
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            if (allRegistrations.length === 0) {
+                showError('لا توجد بيانات للتصدير');
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            
+            // Headers
+            csvContent += "الاسم,الهاتف,المحافظة,الجهاز,السعر,الحالة الدراسية,الجامعة,الخبرة,تاريخ التسجيل\n";
+            
+            // Data rows
+            allRegistrations.forEach(reg => {
+                const row = [
+                    reg.fullName,
+                    reg.phone,
+                    reg.governorate,
+                    reg.device,
+                    reg.price,
+                    reg.studyStatus,
+                    reg.university,
+                    reg.experience,
+                    new Date(reg.registrationDate).toLocaleDateString('ar-IQ')
+                ].join(',');
+                
+                csvContent += row + "\n";
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `المسجلين_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showSuccess('تم تصدير البيانات بنجاح');
+        }
+
+        // Utility functions
+        function getInitials(name) {
+            return name.split(' ').map(word => word[0]).join('').toUpperCase();
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 60) {
+                return `قبل ${minutes} دقيقة`;
+            } else if (hours < 24) {
+                return `قبل ${hours} ساعة`;
+            } else if (days < 7) {
+                return `قبل ${days} يوم`;
+            } else {
+                return date.toLocaleDateString('ar-IQ');
+            }
+        }
+
+        // Modal functions
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditId = null;
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentDeleteId = null;
+            currentDeleteName = '';
+        }
+
+        // Toast notifications
+        function showSuccess(message) {
+            const toast = document.getElementById('successToast');
+            toast.querySelector('.toast-content').textContent = message;
+            toast.style.display = 'flex';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 5000);
+        }
+
+        function showError(message) {
+            const toast = document.getElementById('errorToast');
+            toast.querySelector('.toast-content').textContent = message;
+            toast.style.display = 'flex';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 5000);
+        }
+
+        function hideToast(toastId) {
+            document.getElementById(toastId).style.display = 'none';
+        }
+
+        // Navigation
+        function navigateTo(page) {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            
+            // In a real app, you would load different content based on the page
+            if (page === 'registrations') {
+                loadRegistrations();
+            } else {
+                showError('هذه الصفحة قيد التطوير');
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Add event listeners
+        function addEventListeners() {
+            // Search input
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            
+            // Filter inputs
+            document.getElementById('filterGovernorate').addEventListener('change', applyFilters);
+            document.getElementById('filterDevice').addEventListener('change', applyFilters);
+            document.getElementById('filterStudyStatus').addEventListener('change', applyFilters);
+            document.getElementById('filterDate').addEventListener('change', applyFilters);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                const editModal = document.getElementById('editModal');
+                const deleteModal = document.getElementById('deleteModal');
+                
+                if (event.target === editModal) {
+                    closeEditModal();
+                }
+                if (event.target === deleteModal) {
+                    closeDeleteModal();
+                }
+            });
+        }
+
+        // Export functions for global access
+        window.openEditModal = openEditModal;
+        window.openDeleteModal = openDeleteModal;
+        window.viewRegistration = viewRegistration;
+        window.applyFilters = applyFilters;
+        window.clearFilters = clearFilters;
+        window.exportToExcel = exportToExcel;
+        window.loadRegistrations = loadRegistrations;
+        window.navigateTo = navigateTo;
+        window.toggleSidebar = toggleSidebar;
+        window.closeEditModal = closeEditModal;
+        window.closeDeleteModal = closeDeleteModal;
+        window.confirmDelete = confirmDelete;
+        window.updateRegistration = updateRegistration;
+        window.hideToast = hideToast;
+    </script>
+</body>
+</html>
