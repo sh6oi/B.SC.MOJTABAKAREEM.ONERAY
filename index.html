@@ -3,32 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>لوحة التحكم - تدريب الأشعة</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>نظام التسجيل - الدورات التعليمية</title>
     <style>
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary: #06d6a0;
-            --danger: #ef476f;
-            --warning: #ffd166;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --border: #dee2e6;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
-            --radius: 12px;
-            --radius-sm: 8px;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=El+Messiri:wght@400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -36,714 +14,440 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Tajawal', sans-serif;
+            background: #0a0a0a;
             min-height: 100vh;
-            color: var(--dark);
-            line-height: 1.6;
-            overflow-x: hidden;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-
-        /* App Container */
-        .app-container {
-            max-width: 100%;
-            min-height: 100vh;
-            background: var(--light);
-            position: relative;
-        }
-
-        /* Top App Bar (Mobile Header) */
-        .app-bar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            height: 60px;
-            background: var(--primary);
-            color: white;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .app-bar-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .app-bar-title i {
-            font-size: 1.3rem;
-        }
-
-        .app-bar-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255,255,255,0.25);
-        }
-
-        /* Bottom Navigation (Mobile) */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            height: 65px;
-            background: white;
-            display: flex;
-            justify-content: space-around;
             align-items: center;
-            border-top: 1px solid var(--border);
-            z-index: 1000;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            color: var(--gray);
-            text-decoration: none;
-            flex: 1;
-            height: 100%;
-            transition: all 0.3s ease;
-            padding: 8px 0;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .nav-item i {
-            font-size: 1.3rem;
-        }
-
-        .nav-item span {
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 70px 16px 70px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .stat-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 1.2rem;
-            color: white;
-        }
-
-        .stat-icon.primary {
-            background: var(--primary);
-        }
-
-        .stat-icon.success {
-            background: var(--secondary);
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        /* Search Bar */
-        .search-section {
-            background: white;
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 16px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 14px 50px 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-family: 'Cairo', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-            font-size: 1.1rem;
-        }
-
-        /* Quick Filters */
-        .filters-row {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .filter-chip {
-            padding: 8px 16px;
-            background: var(--light);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* Registrations List */
-        .registrations-list {
-            margin-top: 20px;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title i {
-            color: var(--primary);
-        }
-
-        /* Registration Card */
-        .registration-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            position: relative;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .registration-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.15);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .user-details h4 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--dark);
-        }
-
-        .user-phone {
-            font-size: 0.9rem;
-            color: var(--gray);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .card-date {
-            background: var(--light);
-            padding: 6px 10px;
-            border-radius: var(--radius-sm);
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-
-        /* Card Content */
-        .card-content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .info-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .info-label {
-            font-size: 0.8rem;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
-        .info-value {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-success {
-            background: rgba(6, 214, 160, 0.1);
-            color: var(--secondary);
-        }
-
-        .status-warning {
-            background: rgba(255, 209, 102, 0.1);
-            color: #e6a700;
-        }
-
-        /* Card Actions */
-        .card-actions {
-            display: flex;
-            gap: 8px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        .action-btn {
-            flex: 1;
             padding: 10px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* تأثيرات الخلفية للهواتف */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+            top: -50px;
+            right: -50px;
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
+            bottom: -50px;
+            left: -50px;
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite reverse;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .container {
+            background: #111111;
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 30px rgba(255, 215, 0, 0.15),
+                0 0 0 1px rgba(255, 215, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* رأس الصفحة - متجاوب */
+        .header-section {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+            padding: 25px 20px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 15px,
+                rgba(255, 255, 255, 0.08) 15px,
+                rgba(255, 255, 255, 0.08) 30px
+            );
+            animation: patternMove 25s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-30%, -30%) rotate(360deg); }
+        }
+
+        .logo-icon {
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            background: #000000;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 
+                0 5px 20px rgba(0, 0, 0, 0.3),
+                0 0 0 3px rgba(255, 255, 255, 0.4);
+        }
+
+        .main-title {
+            text-align: center;
+            color: #000000;
+            font-family: 'El Messiri', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #000000;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            opacity: 0.85;
+        }
+
+        .instructor-badge {
+            background: #000000;
+            color: #FFD700;
+            padding: 12px 18px;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.6;
+        }
+
+        /* محتوى النموذج - متجاوب */
+        .form-content {
+            padding: 25px 18px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .label-icon {
+            margin-left: 8px;
+            font-size: 18px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1a1a1a;
+            border: 1.5px solid #333333;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #FFFFFF;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #FFD700;
+            background: #0d0d0d;
+            box-shadow: 
+                0 0 0 3px rgba(255, 215, 0, 0.1),
+                0 0 15px rgba(255, 215, 0, 0.15);
+        }
+
+        input::placeholder {
+            color: #666666;
+            font-size: 14px;
+        }
+
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23FFD700' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            padding-left: 40px;
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: #FFFFFF;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .material-field {
+            background: #0a0a0a !important;
+            color: #FFD700 !important;
+            font-weight: 700 !important;
+            border-color: #FFD700 !important;
+            cursor: not-allowed;
+            font-size: 15px !important;
+        }
+
+        /* زر التسجيل */
+        .submit-section {
+            margin-top: 30px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+            color: #000000;
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 900;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'El Messiri', sans-serif;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+            box-shadow: 0 3px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        @media (hover: hover) {
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+                background: linear-gradient(135deg, #FFD700 0%, #FFB300 100%);
+            }
+        }
+
+        .btn-content {
+            position: relative;
+            z-index: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .action-btn.view {
-            background: rgba(67, 97, 238, 0.1);
-            color: var(--primary);
+        .btn-content span {
+            font-size: 18px;
         }
 
-        .action-btn.edit {
-            background: rgba(6, 214, 160, 0.1);
-            color: var(--secondary);
-        }
-
-        .action-btn.delete {
-            background: rgba(239, 71, 111, 0.1);
-            color: var(--danger);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            background: white;
-            border-radius: var(--radius);
-            margin-top: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: var(--border);
-            margin-bottom: 16px;
-        }
-
-        .empty-state h3 {
-            font-size: 1.2rem;
-            color: var(--gray);
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        /* Loading State */
-        .loading-state {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Modal Styles */
+        /* النافذة المنبثقة - محسنة للهواتف */
         .modal {
             display: none;
             position: fixed;
             top: 0;
-            right: 0;
-            bottom: 0;
             left: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            align-items: center;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
             justify-content: center;
-            padding: 16px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal.active {
-            display: flex;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding: 15px;
         }
 
         .modal-content {
-            background: white;
-            border-radius: var(--radius);
+            background: #111111;
+            border-radius: 20px;
+            padding: 25px 20px;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
+            animation: modalSlideIn 0.3s ease;
+            border: 1.5px solid #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
             max-height: 90vh;
             overflow-y: auto;
-            animation: slideUp 0.3s ease;
         }
 
-        @keyframes slideUp {
+        @keyframes modalSlideIn {
             from {
-                transform: translateY(50px);
+                transform: translateY(-30px) scale(0.95);
                 opacity: 0;
             }
             to {
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
                 opacity: 1;
             }
         }
 
         .modal-header {
-            padding: 20px 20px 15px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .close-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: var(--light);
-            color: var(--gray);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .close-btn:hover {
-            background: var(--border);
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        /* Form Styles */
-        .form-group {
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
+        .modal-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            color: #FFD700;
+            font-size: 24px;
+            font-family: 'El Messiri', sans-serif;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 0.95rem;
         }
 
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-family: 'Cairo', sans-serif;
-            transition: all 0.3s ease;
+        .modal-header .question {
+            color: #CCCCCC;
+            font-size: 16px;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        .confirmation-details {
+            background: #1a1a1a;
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #333333;
         }
 
-        .radio-group {
+        .detail-item {
             display: flex;
-            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a2a;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #999999;
+            font-size: 13px;
+            min-width: 70px;
+        }
+
+        .detail-value {
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: left;
+            word-break: break-all;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .radio-option input[type="radio"] {
-            display: none;
-        }
-
-        .radio-custom {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .radio-option input[type="radio"]:checked + .radio-custom {
-            border-color: var(--primary);
-        }
-
-        .radio-option input[type="radio"]:checked + .radio-custom::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
-        .modal-footer {
-            padding: 15px 20px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 12px;
+        .btn-confirm,
+        .btn-cancel {
+            padding: 12px 25px;
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'El Messiri', sans-serif;
+            flex: 1;
+            min-width: 120px;
+            touch-action: manipulation;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
+        .btn-confirm {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+            color: #000000;
+            box-shadow: 0 3px 15px rgba(255, 215, 0, 0.3);
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
+        .btn-confirm:active {
+            transform: scale(0.95);
         }
 
-        .btn-secondary {
-            background: var(--light);
-            color: var(--dark);
-            border: 2px solid var(--border);
+        .btn-cancel {
+            background: transparent;
+            color: #FF4444;
+            border: 1.5px solid #FF4444;
         }
 
-        /* Confirm Modal */
-        .confirm-modal .modal-content {
-            max-width: 400px;
+        .btn-cancel:active {
+            background: rgba(255, 68, 68, 0.15);
         }
 
-        .confirm-body {
+        /* رسائل النجاح والخطأ */
+        .message {
+            display: none;
             text-align: center;
-            padding: 30px 20px;
-        }
-
-        .confirm-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(239, 71, 111, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
-            color: var(--danger);
-        }
-
-        .confirm-text {
-            font-size: 1.2rem;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            animation: messageSlideIn 0.3s ease;
             font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--dark);
+            font-size: 15px;
+            word-break: break-word;
         }
 
-        .confirm-subtext {
-            color: var(--gray);
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 80px;
-            right: 16px;
-            left: 16px;
-            background: var(--dark);
-            color: white;
-            padding: 16px;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 1500;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            animation: slideInUp 0.3s ease;
-        }
-
-        @keyframes slideInUp {
+        @keyframes messageSlideIn {
             from {
-                transform: translateY(100px);
+                transform: translateY(15px);
                 opacity: 0;
             }
             to {
@@ -752,1000 +456,458 @@
             }
         }
 
-        .toast.success {
-            background: var(--secondary);
+        .success-message {
+            background: rgba(0, 200, 83, 0.15);
+            color: #00C853;
+            border: 1.5px solid #00C853;
         }
 
-        .toast.error {
-            background: var(--danger);
+        .error-message {
+            background: rgba(255, 68, 68, 0.15);
+            color: #FF4444;
+            border: 1.5px solid #FF4444;
         }
 
-        .toast i {
-            font-size: 1.3rem;
-        }
-
-        /* Filter Modal (Mobile) */
-        .filter-modal .modal-content {
-            max-width: 400px;
-        }
-
-        .filter-section {
-            margin-bottom: 25px;
-        }
-
-        .filter-section h4 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Tablet Styles */
-        @media (min-width: 768px) {
-            html {
-                font-size: 18px;
-            }
-
-            .main-content {
-                padding: 80px 24px 80px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .card-content {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .toast {
-                max-width: 400px;
-                right: 24px;
-                left: auto;
-            }
-
-            .bottom-nav {
-                display: none;
-            }
-
-            .app-bar {
-                height: 70px;
-                padding: 0 24px;
-            }
-
-            .app-bar-title {
-                font-size: 1.3rem;
-            }
-
-            .icon-btn {
-                width: 45px;
-                height: 45px;
-            }
-        }
-
-        /* Desktop Styles */
-        @media (min-width: 1024px) {
-            .main-content {
-                padding: 90px 32px 90px;
-            }
-
-            .registration-card {
-                display: grid;
-                grid-template-columns: 2fr 1fr;
-                gap: 20px;
-                align-items: center;
-            }
-
-            .card-header {
-                margin-bottom: 0;
-                padding-bottom: 0;
-                border-bottom: none;
-                grid-column: 1;
-            }
-
-            .card-content {
-                grid-column: 1;
-                margin-bottom: 0;
-            }
-
-            .card-actions {
-                grid-column: 2;
-                grid-row: 1 / span 2;
-                border-top: none;
-                padding-top: 0;
-                border-right: 1px solid var(--border);
-                padding-right: 16px;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            .action-btn {
-                width: 100%;
-            }
-        }
-
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --light: #1a1a1a;
-                --dark: #ffffff;
-                --gray: #a0a0a0;
-                --border: #333333;
-                --shadow: 0 2px 10px rgba(0,0,0,0.3);
-            }
-
+        /* تحسينات للمس */
+        @media (max-width: 480px) {
             body {
-                background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+                padding: 5px;
             }
 
-            .registration-card,
-            .search-section,
-            .stat-card,
-            .empty-state {
-                background: #2d2d2d;
+            .container {
+                border-radius: 15px;
+                margin: 5px auto;
             }
 
-            .info-value,
-            .user-details h4,
-            .section-title {
-                color: var(--dark);
+            .header-section {
+                padding: 20px 15px 25px;
+            }
+
+            .main-title {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+
+            .instructor-badge {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+
+            .logo-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .form-content {
+                padding: 20px 15px;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .form-label {
+                font-size: 14px;
+            }
+
+            input[type="text"],
+            input[type="tel"],
+            select {
+                padding: 12px 14px;
+                font-size: 14px;
+                border-radius: 10px;
+            }
+
+            .btn-submit {
+                padding: 14px;
+                font-size: 16px;
+                border-radius: 10px;
             }
 
             .modal-content {
-                background: #2d2d2d;
+                padding: 20px 15px;
+            }
+
+            .modal-header h2 {
+                font-size: 20px;
+            }
+
+            .modal-header .question {
+                font-size: 14px;
+            }
+
+            .detail-item {
+                padding: 8px 0;
+            }
+
+            .detail-label {
+                font-size: 12px;
+            }
+
+            .detail-value {
+                font-size: 13px;
+            }
+
+            .btn-confirm,
+            .btn-cancel {
+                padding: 10px 20px;
+                font-size: 14px;
             }
         }
 
-        /* iPhone Notch Support */
-        @supports (padding: max(0px)) {
-            .main-content {
-                padding-top: max(70px, env(safe-area-inset-top) + 70px);
-                padding-bottom: max(70px, env(safe-area-inset-bottom) + 70px);
+        /* تحسينات للأجهزة اللوحية */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                max-width: 450px;
             }
 
-            .app-bar {
-                padding-top: env(safe-area-inset-top);
-                height: calc(60px + env(safe-area-inset-top));
+            .form-content {
+                padding: 25px 20px;
             }
+        }
 
-            .bottom-nav {
-                height: calc(65px + env(safe-area-inset-bottom));
-            }
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #FFD700;
+            border-radius: 2px;
+        }
+
+        /* تأثير الاختيار */
+        ::selection {
+            background: #FFD700;
+            color: #000000;
+        }
+
+        /* تحسين التركيز للمس */
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible {
+            outline: 2px solid #FFD700;
+            outline-offset: 2px;
+        }
+
+        /* إخفاء outline للماوس */
+        input:focus:not(:focus-visible),
+        select:focus:not(:focus-visible),
+        button:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* تحسين المسافات بين العناصر */
+        .form-group + .form-group {
+            margin-top: -5px;
+        }
+
+        /* تأثير التحميل للنموذج */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <!-- App Container -->
-    <div class="app-container">
-        <!-- Top App Bar -->
-        <header class="app-bar">
-            <div class="app-bar-title">
-                <i class="fas fa-users-cog"></i>
-                <span>لوحة التحكم</span>
+    <div class="container">
+        <!-- رأس الصفحة -->
+        <div class="header-section">
+            <div class="logo-icon">
+                <div class="logo-circle">📚</div>
             </div>
-            <div class="app-bar-actions">
-                <button class="icon-btn" onclick="refreshData()">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <button class="icon-btn" onclick="toggleFilterModal()">
-                    <i class="fas fa-filter"></i>
-                </button>
-                <button class="icon-btn" onclick="window.location.href='index.html'">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Stats Section -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon primary">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-number" id="totalRegistrations">0</div>
-                    <div class="stat-label">المسجلين</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon success">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="stat-number" id="todayRegistrations">0</div>
-                    <div class="stat-label">اليوم</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: var(--warning);">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="stat-number" id="studentCount">0</div>
-                    <div class="stat-label">طلاب</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: var(--danger);">
-                        <i class="fas fa-x-ray"></i>
-                    </div>
-                    <div class="stat-number" id="xrayCount">0</div>
-                    <div class="stat-label">X-ray</div>
-                </div>
-            </div>
-
-            <!-- Search Section -->
-            <section class="search-section">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="ابحث عن مسجل..." 
-                           oninput="searchRegistrations()">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="filters-row">
-                    <div class="filter-chip active" onclick="filterBy('all')">الكل</div>
-                    <div class="filter-chip" onclick="filterBy('today')">اليوم</div>
-                    <div class="filter-chip" onclick="filterBy('students')">طلاب</div>
-                    <div class="filter-chip" onclick="filterBy('graduates')">خريجون</div>
-                    <div class="filter-chip" onclick="filterBy('xray')">X-ray</div>
-                    <div class="filter-chip" onclick="filterBy('ct')">CT</div>
-                </div>
-            </section>
-
-            <!-- Registrations List -->
-            <section class="registrations-list">
-                <div class="section-title">
-                    <i class="fas fa-list"></i>
-                    <span>قائمة المسجلين</span>
-                    <span style="margin-right: auto; font-size: 0.9rem; color: var(--gray);" 
-                          id="resultsCount">(0 نتيجة)</span>
-                </div>
-
-                <div id="registrationsContainer">
-                    <!-- Loading State -->
-                    <div class="loading-state" id="loadingState">
-                        <div class="spinner"></div>
-                        <p>جاري تحميل البيانات...</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Bottom Navigation (Mobile) -->
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active" onclick="showSection('registrations')">
-                <i class="fas fa-users"></i>
-                <span>المسجلين</span>
-            </a>
-            <a href="#" class="nav-item" onclick="showSection('stats')">
-                <i class="fas fa-chart-bar"></i>
-                <span>إحصائيات</span>
-            </a>
-            <a href="#" class="nav-item" onclick="exportData()">
-                <i class="fas fa-file-export"></i>
-                <span>تصدير</span>
-            </a>
-            <a href="#" class="nav-item" onclick="showSettings()">
-                <i class="fas fa-cog"></i>
-                <span>إعدادات</span>
-            </a>
-        </nav>
-
-        <!-- Toast Notifications -->
-        <div class="toast success" id="successToast" style="display: none;">
-            <i class="fas fa-check-circle"></i>
-            <div id="toastMessage"></div>
-        </div>
-
-        <div class="toast error" id="errorToast" style="display: none;">
-            <i class="fas fa-exclamation-circle"></i>
-            <div id="errorMessage"></div>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> تعديل البيانات</h3>
-                <button class="close-btn" onclick="closeEditModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm"></form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeEditModal()">إلغاء</button>
-                <button class="btn btn-primary" onclick="saveChanges()">حفظ التغييرات</button>
+            <h1 class="main-title">نظام التسجيل</h1>
+            <p class="subtitle">الدورات التعليمية المتخصصة</p>
+            <div class="instructor-badge">
+                ⭐ يتم شرح المواد من قبل التدريسي مجتبى كريم ⭐
             </div>
         </div>
-    </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal confirm-modal" id="deleteModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-exclamation-triangle"></i> تأكيد الحذف</h3>
-                <button class="close-btn" onclick="closeDeleteModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="confirm-body">
-                <div class="confirm-icon">
-                    <i class="fas fa-trash-alt"></i>
+        <!-- محتوى النموذج -->
+        <div class="form-content">
+            <form id="registrationForm" autocomplete="off">
+                <div class="form-group">
+                    <label class="form-label" for="fullName">
+                        <span class="label-icon">👤</span>
+                        الاسم الثلاثي الكامل
+                    </label>
+                    <input type="text" id="fullName" name="fullName" required 
+                           placeholder="أدخل اسمك الثلاثي الكامل"
+                           autocomplete="name">
                 </div>
-                <div class="confirm-text" id="deleteConfirmText"></div>
-                <div class="confirm-subtext">لا يمكن التراجع عن هذا الإجراء بعد الحذف</div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-secondary" onclick="closeDeleteModal()" style="flex: 1;">إلغاء</button>
-                    <button class="btn" onclick="confirmDelete()" style="flex: 1; background: var(--danger); color: white;">حذف</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Filter Modal -->
-    <div class="modal filter-modal" id="filterModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-filter"></i> تصفية متقدمة</h3>
-                <button class="close-btn" onclick="toggleFilterModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="filter-section">
-                    <h4><i class="fas fa-map-marker-alt"></i> المحافظة</h4>
-                    <select id="filterGovernorate" class="form-control">
-                        <option value="">جميع المحافظات</option>
+                <div class="form-group">
+                    <label class="form-label" for="stage">
+                        <span class="label-icon">📖</span>
+                        المرحلة الدراسية
+                    </label>
+                    <select id="stage" name="stage" required>
+                        <option value="">اختر المرحلة الدراسية</option>
+                        <option value="الثالثة">المرحلة الثالثة</option>
+                        <option value="الرابعة">المرحلة الرابعة</option>
                     </select>
                 </div>
-                
-                <div class="filter-section">
-                    <h4><i class="fas fa-x-ray"></i> نوع الجهاز</h4>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="filterDeviceType" value="" checked>
-                            <span class="radio-custom"></span>
-                            <span>الكل</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="filterDeviceType" value="X-ray">
-                            <span class="radio-custom"></span>
-                            <span>X-ray فقط</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="filterDeviceType" value="X-ray and CT">
-                            <span class="radio-custom"></span>
-                            <span>X-ray and CT</span>
-                        </label>
-                    </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="material">
+                        <span class="label-icon">📘</span>
+                        المادة المحددة تلقائياً
+                    </label>
+                    <input type="text" id="material" name="material" 
+                           class="material-field" readonly 
+                           placeholder="سيتم تحديد المادة تلقائياً">
                 </div>
-                
-                <div class="filter-section">
-                    <h4><i class="fas fa-calendar"></i> التاريخ</h4>
-                    <input type="date" id="filterDate" class="form-control">
+
+                <div class="form-group">
+                    <label class="form-label" for="phone">
+                        <span class="label-icon">📱</span>
+                        رقم الهاتف
+                    </label>
+                    <input type="tel" id="phone" name="phone" required 
+                           placeholder="مثال: 07701234567"
+                           inputmode="numeric"
+                           pattern="[0-9]*">
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="university">
+                        <span class="label-icon">🏛️</span>
+                        الجامعة
+                    </label>
+                    <input type="text" id="university" name="university" required 
+                           placeholder="أدخل اسم جامعتك">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="telegram">
+                        <span class="label-icon">💬</span>
+                        معرف التليجرام
+                    </label>
+                    <input type="text" id="telegram" name="telegram" required 
+                           placeholder="مثال: @username"
+                           inputmode="text">
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="btn-submit">
+                        <div class="btn-content">
+                            <span>📝</span>
+                            <span>تسجيل الآن</span>
+                            <span>🚀</span>
+                        </div>
+                    </button>
+                </div>
+            </form>
+
+            <div id="successMessage" class="message success-message">
+                ✅ تم التسجيل بنجاح! شكراً لتسجيلك معنا.
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="resetAdvancedFilters()">إعادة تعيين</button>
-                <button class="btn btn-primary" onclick="applyAdvancedFilters()">تطبيق التصفية</button>
+
+            <div id="errorMessage" class="message error-message">
+                ❌ حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <!-- نافذة التأكيد -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon">🔍</div>
+                <h2>تأكيد البيانات</h2>
+                <p class="question">هل تأكدت من جميع البيانات؟</p>
+            </div>
+            <div class="confirmation-details" id="confirmationDetails"></div>
+            <div class="modal-buttons">
+                <button class="btn-confirm" id="confirmBtn">
+                    ✅ نعم، أرسل
+                </button>
+                <button class="btn-cancel" id="cancelBtn">
+                    ❌ إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
 
-        // Firebase config
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
         const firebaseConfig = {
-            apiKey: "AIzaSyDGgdKRO0bpZwoXzjBmOVEBH5_YDnly4wk",
-            authDomain: "lunex-jewe.firebaseapp.com",
-            databaseURL: "https://lunex-jewe-default-rtdb.firebaseio.com",
-            projectId: "lunex-jewe",
-            storageBucket: "lunex-jewe.firebasestorage.app",
-            messagingSenderId: "79262821764",
-            appId: "1:79262821764:web:7e3f48fb093fb9edf0c1d1",
-            measurementId: "G-YR7YJ450MH"
+            apiKey: "AIzaSyDXQ1JZMEaFlxGtyB_sdq1Sp7Cu-TrlK10",
+            authDomain: "dorat-bd958.firebaseapp.com",
+            databaseURL: "https://dorat-bd958-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "dorat-bd958",
+            storageBucket: "dorat-bd958.firebasestorage.app",
+            messagingSenderId: "1064812019462",
+            appId: "1:1064812019462:web:af2e5d53c5744140b22887",
+            measurementId: "G-14FDEJHXHL"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Global variables
-        let allRegistrations = [];
-        let filteredRegistrations = [];
-        let currentEditId = null;
-        let currentDeleteId = null;
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            loadRegistrations();
-            populateGovernorates();
-            setupEventListeners();
+        // تحديد المادة تلقائياً حسب المرحلة
+        document.getElementById('stage').addEventListener('change', function() {
+            const materialInput = document.getElementById('material');
+            if (this.value === 'الثالثة') {
+                materialInput.value = 'فيزياء الرنين';
+            } else if (this.value === 'الرابعة') {
+                materialInput.value = 'الرنين المغناطيسي';
+            } else {
+                materialInput.value = '';
+            }
         });
 
-        // Load registrations from Firebase
-        function loadRegistrations() {
-            const registrationsRef = ref(database, 'registrations');
+        // معالجة تقديم النموذج
+        const form = document.getElementById('registrationForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            onValue(registrationsRef, (snapshot) => {
-                allRegistrations = [];
-                let todayCount = 0;
-                let studentCount = 0;
-                let xrayCount = 0;
-                const today = new Date().toDateString();
-                
-                snapshot.forEach((childSnapshot) => {
-                    const registration = childSnapshot.val();
-                    registration.id = childSnapshot.key;
-                    allRegistrations.push(registration);
-                    
-                    // Update stats
-                    const regDate = new Date(registration.registrationDate).toDateString();
-                    if (regDate === today) todayCount++;
-                    if (registration.studyStatus === 'طالب') studentCount++;
-                    if (registration.device === 'X-ray') xrayCount++;
-                });
-                
-                // Update stats
-                document.getElementById('totalRegistrations').textContent = allRegistrations.length;
-                document.getElementById('todayRegistrations').textContent = todayCount;
-                document.getElementById('studentCount').textContent = studentCount;
-                document.getElementById('xrayCount').textContent = xrayCount;
-                
-                // Display registrations
-                filteredRegistrations = [...allRegistrations];
-                displayRegistrations();
-                updateResultsCount();
-                
-                // Hide loading
-                document.getElementById('loadingState').style.display = 'none';
-            });
-        }
-
-        // Display registrations
-        function displayRegistrations() {
-            const container = document.getElementById('registrationsContainer');
-            
-            if (filteredRegistrations.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-users-slash"></i>
-                        <h3>لا توجد بيانات</h3>
-                        <p>لم يتم العثور على مسجلين مطابقين للبحث</p>
-                        <button class="btn btn-primary" onclick="clearFilters()" style="margin-top: 20px;">
-                            عرض الكل
-                        </button>
-                    </div>
-                `;
+            // التحقق من صحة معرف التليجرام
+            const telegram = document.getElementById('telegram').value.trim();
+            if (!telegram.startsWith('@')) {
+                alert('⚠️ يجب أن يبدأ معرف التليجرام بـ @');
+                document.getElementById('telegram').focus();
                 return;
             }
-            
-            // Sort by date
-            filteredRegistrations.sort((a, b) => b.timestamp - a.timestamp);
-            
-            let html = '';
-            
-            filteredRegistrations.forEach(registration => {
-                const date = new Date(registration.registrationDate);
-                const formattedDate = date.toLocaleDateString('ar-IQ', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                });
-                
-                const timeAgo = getTimeAgo(date);
-                const priceFormatted = parseInt(registration.price).toLocaleString('ar-IQ');
-                const initials = getInitials(registration.fullName);
-                
-                html += `
-                <div class="registration-card" data-id="${registration.id}">
-                    <div class="card-header">
-                        <div class="user-info">
-                            <div class="user-avatar">${initials}</div>
-                            <div class="user-details">
-                                <h4>${registration.fullName}</h4>
-                                <div class="user-phone">
-                                    <i class="fas fa-phone"></i>
-                                    ${registration.phone}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-date">
-                            <i class="far fa-clock"></i>
-                            ${timeAgo}
-                        </div>
-                    </div>
-                    
-                    <div class="card-content">
-                        <div class="info-item">
-                            <div class="info-label">المحافظة</div>
-                            <div class="info-value">${registration.governorate}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">الجهاز</div>
-                            <div class="info-value">${registration.device}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">السعر</div>
-                            <div class="info-value">${priceFormatted} دينار</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">الحالة</div>
-                            <div class="info-value status-badge ${registration.studyStatus === 'طالب' ? 'status-success' : 'status-warning'}">
-                                ${registration.studyStatus}
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">الجامعة</div>
-                            <div class="info-value">${registration.university}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">الخبرة</div>
-                            <div class="info-value status-badge ${registration.experience === 'نعم' ? 'status-success' : 'status-warning'}">
-                                ${registration.experience}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-actions">
-                        <button class="action-btn view" onclick="viewDetails('${registration.id}')">
-                            <i class="fas fa-eye"></i>
-                            عرض
-                        </button>
-                        <button class="action-btn edit" onclick="openEditModal('${registration.id}')">
-                            <i class="fas fa-edit"></i>
-                            تعديل
-                        </button>
-                        <button class="action-btn delete" onclick="openDeleteModal('${registration.id}', '${registration.fullName}')">
-                            <i class="fas fa-trash-alt"></i>
-                            حذف
-                        </button>
-                    </div>
-                </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
 
-        // Search registrations
-        function searchRegistrations() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                filteredRegistrations = [...allRegistrations];
-            } else {
-                filteredRegistrations = allRegistrations.filter(reg => 
-                    reg.fullName.toLowerCase().includes(searchTerm) ||
-                    reg.phone.includes(searchTerm) ||
-                    reg.governorate.toLowerCase().includes(searchTerm) ||
-                    reg.university.toLowerCase().includes(searchTerm)
-                );
+            // التحقق من صحة رقم الهاتف
+            const phone = document.getElementById('phone').value.trim();
+            if (phone.length < 10) {
+                alert('⚠️ يرجى إدخال رقم هاتف صحيح');
+                document.getElementById('phone').focus();
+                return;
             }
-            
-            displayRegistrations();
-            updateResultsCount();
-        }
 
-        // Quick filter
-        function filterBy(type) {
-            // Update active chip
-            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            const today = new Date().toDateString();
-            
-            switch(type) {
-                case 'all':
-                    filteredRegistrations = [...allRegistrations];
-                    break;
-                case 'today':
-                    filteredRegistrations = allRegistrations.filter(reg => 
-                        new Date(reg.registrationDate).toDateString() === today
-                    );
-                    break;
-                case 'students':
-                    filteredRegistrations = allRegistrations.filter(reg => 
-                        reg.studyStatus === 'طالب'
-                    );
-                    break;
-                case 'graduates':
-                    filteredRegistrations = allRegistrations.filter(reg => 
-                        reg.studyStatus === 'خريج'
-                    );
-                    break;
-                case 'xray':
-                    filteredRegistrations = allRegistrations.filter(reg => 
-                        reg.device === 'X-ray'
-                    );
-                    break;
-                case 'ct':
-                    filteredRegistrations = allRegistrations.filter(reg => 
-                        reg.device === 'X-ray and CT'
-                    );
-                    break;
-            }
-            
-            displayRegistrations();
-            updateResultsCount();
-        }
-
-        // Open edit modal
-        function openEditModal(id) {
-            currentEditId = id;
-            const registration = allRegistrations.find(r => r.id === id);
-            
-            if (!registration) return;
-            
-            const form = document.getElementById('editForm');
-            form.innerHTML = `
-                <div class="form-group">
-                    <label>الاسم الثلاثي</label>
-                    <input type="text" id="editName" value="${registration.fullName}" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>رقم الهاتف</label>
-                    <input type="tel" id="editPhone" value="${registration.phone}" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>المحافظة</label>
-                    <select id="editGovernorate" required>
-                        <option value="">اختر المحافظة</option>
-                        <option value="بغداد" ${registration.governorate === 'بغداد' ? 'selected' : ''}>بغداد</option>
-                        <option value="البصرة" ${registration.governorate === 'البصرة' ? 'selected' : ''}>البصرة</option>
-                        <option value="نينوى" ${registration.governorate === 'نينوى' ? 'selected' : ''}>نينوى</option>
-                        <option value="أربيل" ${registration.governorate === 'أربيل' ? 'selected' : ''}>أربيل</option>
-                        <option value="السليمانية" ${registration.governorate === 'السليمانية' ? 'selected' : ''}>السليمانية</option>
-                        <option value="دهوك" ${registration.governorate === 'دهوك' ? 'selected' : ''}>دهوك</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>الجهاز</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="editDevice" value="X-ray" ${registration.device === 'X-ray' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>X-ray فقط</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="editDevice" value="X-ray and CT" ${registration.device === 'X-ray and CT' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>X-ray and CT</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>السعر</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="editPrice" value="100000" ${registration.price === '100000' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>100,000 دينار</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="editPrice" value="125000" ${registration.price === '125000' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>125,000 دينار</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>الحالة الدراسية</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="editStudy" value="طالب" ${registration.studyStatus === 'طالب' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>طالب</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="editStudy" value="خريج" ${registration.studyStatus === 'خريج' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>خريج</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>الجامعة</label>
-                    <input type="text" id="editUniversity" value="${registration.university}" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>الخبرة السابقة</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="editExp" value="نعم" ${registration.experience === 'نعم' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>نعم</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="editExp" value="لا" ${registration.experience === 'لا' ? 'checked' : ''}>
-                            <span class="radio-custom"></span>
-                            <span>لا</span>
-                        </label>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('editModal').classList.add('active');
-        }
-
-        // Save changes
-        async function saveChanges() {
-            if (!currentEditId) return;
-            
-            try {
-                const updatedData = {
-                    fullName: document.getElementById('editName').value.trim(),
-                    phone: document.getElementById('editPhone').value.trim(),
-                    governorate: document.getElementById('editGovernorate').value,
-                    device: document.querySelector('input[name="editDevice"]:checked').value,
-                    price: document.querySelector('input[name="editPrice"]:checked').value,
-                    studyStatus: document.querySelector('input[name="editStudy"]:checked').value,
-                    university: document.getElementById('editUniversity').value.trim(),
-                    experience: document.querySelector('input[name="editExp"]:checked').value,
-                    lastUpdated: Date.now()
-                };
-                
-                const registrationRef = ref(database, `registrations/${currentEditId}`);
-                await update(registrationRef, updatedData);
-                
-                closeEditModal();
-                showToast('تم تحديث البيانات بنجاح', 'success');
-                
-            } catch (error) {
-                showToast('حدث خطأ أثناء التحديث', 'error');
-            }
-        }
-
-        // Open delete confirmation
-        function openDeleteModal(id, name) {
-            currentDeleteId = id;
-            document.getElementById('deleteConfirmText').textContent = `حذف ${name}؟`;
-            document.getElementById('deleteModal').classList.add('active');
-        }
-
-        // Confirm delete
-        async function confirmDelete() {
-            if (!currentDeleteId) return;
-            
-            try {
-                const registrationRef = ref(database, `registrations/${currentDeleteId}`);
-                await remove(registrationRef);
-                
-                closeDeleteModal();
-                showToast('تم الحذف بنجاح', 'success');
-                
-            } catch (error) {
-                showToast('حدث خطأ أثناء الحذف', 'error');
-            }
-        }
-
-        // View details
-        function viewDetails(id) {
-            const registration = allRegistrations.find(r => r.id === id);
-            if (!registration) return;
-            
+            // عرض نافذة التأكيد
             const details = `
-الاسم: ${registration.fullName}
-الهاتف: ${registration.phone}
-المحافظة: ${registration.governorate}
-الجهاز: ${registration.device}
-السعر: ${parseInt(registration.price).toLocaleString('ar-IQ')} دينار
-الحالة: ${registration.studyStatus}
-الجامعة: ${registration.university}
-الخبرة: ${registration.experience}
-تاريخ التسجيل: ${new Date(registration.registrationDate).toLocaleDateString('ar-IQ')}
+                <div class="detail-item">
+                    <span class="detail-label">👤 الاسم</span>
+                    <span class="detail-value">${document.getElementById('fullName').value}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📖 المرحلة</span>
+                    <span class="detail-value">${document.getElementById('stage').value}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📘 المادة</span>
+                    <span class="detail-value">${document.getElementById('material').value}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📱 الهاتف</span>
+                    <span class="detail-value">${phone}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">🏛️ الجامعة</span>
+                    <span class="detail-value">${document.getElementById('university').value}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">💬 التليجرام</span>
+                    <span class="detail-value">${telegram}</span>
+                </div>
             `;
             
-            alert(details);
-        }
+            document.getElementById('confirmationDetails').innerHTML = details;
+            document.getElementById('confirmationModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
 
-        // Advanced filters
-        function applyAdvancedFilters() {
-            const governorate = document.getElementById('filterGovernorate').value;
-            const deviceType = document.querySelector('input[name="filterDeviceType"]:checked').value;
-            const date = document.getElementById('filterDate').value;
+        // تأكيد التسجيل
+        document.getElementById('confirmBtn').addEventListener('click', function() {
+            const confirmBtn = this;
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'جاري الإرسال...';
             
-            filteredRegistrations = allRegistrations.filter(reg => {
-                let matches = true;
-                
-                if (governorate && reg.governorate !== governorate) matches = false;
-                if (deviceType && reg.device !== deviceType) matches = false;
-                if (date) {
-                    const regDate = new Date(reg.registrationDate).toISOString().split('T')[0];
-                    if (regDate !== date) matches = false;
-                }
-                
-                return matches;
-            });
+            const studentData = {
+                fullName: document.getElementById('fullName').value.trim(),
+                stage: document.getElementById('stage').value,
+                material: document.getElementById('material').value,
+                phone: document.getElementById('phone').value.trim(),
+                university: document.getElementById('university').value.trim(),
+                telegram: document.getElementById('telegram').value.trim(),
+                registrationDate: new Date().toLocaleString('ar-IQ', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            const studentsRef = ref(database, 'students');
+            const newStudentRef = push(studentsRef);
             
-            toggleFilterModal();
-            displayRegistrations();
-            updateResultsCount();
+            set(newStudentRef, studentData)
+                .then(() => {
+                    closeModal();
+                    document.getElementById('successMessage').style.display = 'block';
+                    form.reset();
+                    document.getElementById('material').value = '';
+                    
+                    // تمرير إلى رسالة النجاح
+                    document.getElementById('successMessage').scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 5000);
+                })
+                .catch((error) => {
+                    closeModal();
+                    document.getElementById('errorMessage').style.display = 'block';
+                    console.error('Error:', error);
+                    
+                    setTimeout(() => {
+                        document.getElementById('errorMessage').style.display = 'none';
+                    }, 5000);
+                })
+                .finally(() => {
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = '✅ نعم، أرسل';
+                });
+        });
+
+        // إلغاء التسجيل
+        document.getElementById('cancelBtn').addEventListener('click', closeModal);
+
+        // إغلاق النافذة المنبثقة
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
-        // Reset advanced filters
-        function resetAdvancedFilters() {
-            document.getElementById('filterGovernorate').value = '';
-            document.querySelector('input[name="filterDeviceType"][value=""]').checked = true;
-            document.getElementById('filterDate').value = '';
-            
-            filteredRegistrations = [...allRegistrations];
-            displayRegistrations();
-            updateResultsCount();
-        }
-
-        // Clear all filters
-        function clearFilters() {
-            document.getElementById('searchInput').value = '';
-            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
-            document.querySelector('.filter-chip').classList.add('active');
-            
-            resetAdvancedFilters();
-        }
-
-        // Utility functions
-        function getInitials(name) {
-            return name.split(' ').slice(0, 2).map(word => word[0]).join('').toUpperCase();
-        }
-
-        function getTimeAgo(date) {
-            const now = new Date();
-            const diff = now - date;
-            const minutes = Math.floor(diff / 60000);
-            const hours = Math.floor(diff / 3600000);
-            const days = Math.floor(diff / 86400000);
-            
-            if (minutes < 60) return `قبل ${minutes} د`;
-            if (hours < 24) return `قبل ${hours} س`;
-            if (days < 7) return `قبل ${days} ي`;
-            return date.toLocaleDateString('ar-IQ');
-        }
-
-        function updateResultsCount() {
-            document.getElementById('resultsCount').textContent = 
-                `(${filteredRegistrations.length} نتيجة)`;
-        }
-
-        function populateGovernorates() {
-            const governorates = [
-                'بغداد', 'البصرة', 'نينوى', 'أربيل', 'السليمانية',
-                'دهوك', 'الأنبار', 'كركوك', 'ديالى', 'واسط',
-                'ميسان', 'ذي قار', 'المثنى', 'القادسية', 'بابل',
-                'كربلاء', 'النجف', 'صلاح الدين'
-            ];
-            
-            const select = document.getElementById('filterGovernorate');
-            governorates.forEach(gov => {
-                const option = document.createElement('option');
-                option.value = gov;
-                option.textContent = gov;
-                select.appendChild(option);
-            });
-        }
-
-        // Modal controls
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('active');
-            currentEditId = null;
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-            currentDeleteId = null;
-        }
-
-        function toggleFilterModal() {
-            document.getElementById('filterModal').classList.toggle('active');
-        }
-
-        // Toast notifications
-        function showToast(message, type) {
-            const toast = type === 'success' ? 
-                document.getElementById('successToast') : 
-                document.getElementById('errorToast');
-            
-            const messageElement = type === 'success' ?
-                document.getElementById('toastMessage') :
-                document.getElementById('errorMessage');
-            
-            messageElement.textContent = message;
-            toast.style.display = 'flex';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        // Navigation
-        function showSection(section) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            event.target.classList.add('active');
-            showToast('هذه الصفحة قيد التطوير', 'error');
-        }
-
-        function refreshData() {
-            document.getElementById('loadingState').style.display = 'block';
-            loadRegistrations();
-            showToast('جاري تحديث البيانات...', 'success');
-        }
-
-        function exportData() {
-            if (filteredRegistrations.length === 0) {
-                showToast('لا توجد بيانات للتصدير', 'error');
-                return;
+        // إغلاق النافذة عند النقر خارجها
+        document.getElementById('confirmationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
             }
-            
-            let csv = 'الاسم,الهاتف,المحافظة,الجهاز,السعر,الحالة الدراسية,الجامعة,الخبرة,تاريخ التسجيل\n';
-            
-            filteredRegistrations.forEach(reg => {
-                csv += `${reg.fullName},${reg.phone},${reg.governorate},${reg.device},${reg.price},${reg.studyStatus},${reg.university},${reg.experience},${new Date(reg.registrationDate).toLocaleDateString('ar-IQ')}\n`;
-            });
-            
-            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `المسجلين_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            showToast('تم تصدير البيانات', 'success');
-        }
+        });
 
-        function showSettings() {
-            showToast('الإعدادات قيد التطوير', 'error');
-        }
+        // إغلاق النافذة عند الضغط على زر الرجوع في الهاتف
+        window.addEventListener('popstate', function(e) {
+            if (document.getElementById('confirmationModal').style.display === 'flex') {
+                closeModal();
+                e.preventDefault();
+            }
+        });
 
-        // Event listeners
-        function setupEventListeners() {
-            // Close modals on outside click
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal')) {
-                    e.target.classList.remove('active');
-                }
-            });
-            
-            // Prevent body scroll when modal is open
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('show', () => {
-                    document.body.style.overflow = 'hidden';
-                });
-                modal.addEventListener('hide', () => {
-                    document.body.style.overflow = 'auto';
-                });
-            });
-        }
-
-        // Export functions globally
-        window.openEditModal = openEditModal;
-        window.openDeleteModal = openDeleteModal;
-        window.closeEditModal = closeEditModal;
-        window.closeDeleteModal = closeDeleteModal;
-        window.saveChanges = saveChanges;
-        window.confirmDelete = confirmDelete;
-        window.viewDetails = viewDetails;
-        window.searchRegistrations = searchRegistrations;
-        window.filterBy = filterBy;
-        window.clearFilters = clearFilters;
-        window.refreshData = refreshData;
-        window.exportData = exportData;
-        window.showSection = showSection;
-        window.showSettings = showSettings;
-        window.toggleFilterModal = toggleFilterModal;
-        window.applyAdvancedFilters = applyAdvancedFilters;
-        window.resetAdvancedFilters = resetAdvancedFilters;
+        // منع التكبير/التصغير المزدوج على الأزرار
+        document.addEventListener('dblclick', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
